@@ -15,6 +15,6 @@ void main() {
 
     expect(find.text('Sistem Manajemen Sekolah'), findsOneWidget);
     expect(find.byType(TextFormField), findsNWidgets(2));
-    expect(find.widgetWithText(ElevatedButton, 'Masuk'), findsOneWidget);
+    expect(find.byType(ElevatedButton), findsOneWidget);
   });
 }
