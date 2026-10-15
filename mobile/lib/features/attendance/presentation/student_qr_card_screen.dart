@@ -425,7 +425,7 @@ class _StudentQrCardScreenState extends ConsumerState<StudentQrCardScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Siap mencetak Kartu Pelajar untuk:'),
+            const Text('Siap mencetak Kartu Pelajar untuk:'),
             const SizedBox(height: 8),
             Text(studentName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             Text('Nomor Kartu: $cardNumber', style: const TextStyle(color: Colors.grey)),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../core/api/api_client.dart';
 import '../../../core/auth/auth_state.dart';
 import '../../../core/design_system/app_colors.dart';
 
@@ -13,21 +12,24 @@ class AccountScreen extends ConsumerWidget {
     final authState = ref.watch(authStateProvider);
     final user = authState.user;
 
-    final isGenderSet = user?.gender != null && (user!.gender == 'L' || user!.gender == 'P');
-    final genderDisplay = user?.gender == 'P'
+    final gender = user?.gender;
+    final isGenderSet = gender == 'L' || gender == 'P';
+    final genderDisplay = gender == 'P'
         ? 'Perempuan (P)'
-        : (user?.gender == 'L' ? 'Laki-laki (L)' : 'Belum diisi / Perlu dilengkapi');
+        : (gender == 'L' ? 'Laki-laki (L)' : 'Belum diisi / Perlu dilengkapi');
 
-    final birthDateDisplay = user?.birthDate ?? 'Belum diisi';
+    final birthDate = user?.birthDate;
+    final birthDateDisplay = birthDate ?? 'Belum diisi';
     final ageDisplay = user?.age != null ? ' (${user!.age} Tahun)' : '';
-    final addressDisplay = user?.address ?? 'Belum diisi';
+    final address = user?.address;
+    final addressDisplay = address ?? 'Belum diisi';
     final phoneDisplay = user?.phone ?? 'Belum diisi';
 
     final isProfileIncomplete = !isGenderSet ||
-        user?.birthDate == null ||
-        user?.birthDate?.isEmpty == true ||
-        user?.address == null ||
-        user?.address?.isEmpty == true;
+        birthDate == null ||
+        birthDate.isEmpty ||
+        address == null ||
+        address.isEmpty;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,14 +48,14 @@ class AccountScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: const Color(0xFFFFEEBA)),
               ),
-              child: Row(
+              child: const Row(
                 children: [
-                  const Icon(Icons.warning_amber_rounded, color: Color(0xFF856404), size: 28),
-                  const SizedBox(width: 12),
+                  Icon(Icons.warning_amber_rounded, color: Color(0xFF856404), size: 28),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Data Profil Perlu Dilengkapi / Dikoreksi',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF856404)),
@@ -300,8 +302,8 @@ class AccountScreen extends ConsumerWidget {
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Row(
-            children: const [
+          title: const Row(
+            children: [
               Icon(Icons.badge_outlined, color: AppColors.primary),
               SizedBox(width: 8),
               Expanded(
@@ -322,8 +324,8 @@ class AccountScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: Colors.blue.shade200),
                   ),
-                  child: Row(
-                    children: const [
+                  child: const Row(
+                    children: [
                       Icon(Icons.info_outline, size: 20, color: Colors.blue),
                       SizedBox(width: 8),
                       Expanded(
@@ -463,7 +465,7 @@ class AccountScreen extends ConsumerWidget {
                   decoration: const InputDecoration(
                     labelText: 'Nomor Telepon / WhatsApp',
                     border: OutlineInputBorder(),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   ),
                 ),
                 const SizedBox(height: 14),

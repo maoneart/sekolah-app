@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import '../../../core/api/api_client.dart';
 import '../../../core/auth/auth_state.dart';
 import '../../../core/design_system/app_colors.dart';
 
@@ -14,8 +13,6 @@ class DashboardScreen extends ConsumerStatefulWidget {
 }
 
 class _DashboardScreenState extends ConsumerState<DashboardScreen> {
-  int _selectedChildIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
@@ -727,13 +724,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   'address': addressCtrl.text,
                   'gender': 'L',
                 });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(backgroundColor: AppColors.statusPresent, content: Text('Siswa baru berhasil diinput & kartu barcode otomatis dibuat!')),
-                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(backgroundColor: AppColors.statusPresent, content: Text('Siswa baru berhasil diinput & kartu barcode otomatis dibuat!')),
+                  );
+                }
               } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Gagal menyimpan: $e')),
-                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Gagal menyimpan: $e')),
+                  );
+                }
               }
             },
             child: const Text('Simpan Siswa'),
@@ -779,13 +780,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     'name': nameCtrl.text,
                     'grade_level': selectedGrade,
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(backgroundColor: AppColors.statusPresent, content: Text('Kelas baru berhasil ditambahkan!')),
-                  );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(backgroundColor: AppColors.statusPresent, content: Text('Kelas baru berhasil ditambahkan!')),
+                    );
+                  }
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Gagal menambahkan: $e')),
-                  );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Gagal menambahkan: $e')),
+                    );
+                  }
                 }
               },
               child: const Text('Simpan Kelas'),
@@ -899,13 +904,17 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     'body': bodyCtrl.text,
                     'target_roles': selectedRoles.isEmpty ? ['all'] : selectedRoles,
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(backgroundColor: AppColors.statusPresent, content: Text('Pengumuman berhasil disampaikan ke peran terpilih!')),
-                  );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(backgroundColor: AppColors.statusPresent, content: Text('Pengumuman berhasil disampaikan ke peran terpilih!')),
+                    );
+                  }
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Gagal mengirim: $e')),
-                  );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Gagal mengirim: $e')),
+                    );
+                  }
                 }
               },
               child: const Text('Kirim Pengumuman'),
