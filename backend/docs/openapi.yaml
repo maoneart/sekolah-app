@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: API Manajemen Sekolah
+  version: 1.0.0
+  description: Kontrak REST API Manajemen Sekolah (Flutter + Laravel Sanctum)
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local Development Server
+  - url: https://api.staging.sekolah.sch.id/api/v1
+    description: Staging Server
+paths:
+  /auth/login:
+    post:
+      summary: Login pengguna (nomor telepon / email + kata sandi)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [login, password]
+              properties:
+                login: { type: string, example: "admin@sekolah.sch.id" }
+                password: { type: string, example: "password123" }
+                device_name: { type: string, example: "Android Device" }
+      responses:
+        '200':
+          description: Berhasil login dan mendapatkan token Sanctum
+        '422':
+          description: Kredensial tidak valid
+  /auth/logout:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Logout dan cabut token perangkat
+      responses:
+        '200':
+          description: Token berhasil dicabut
+  /me:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Ambil profil dan peran pengguna aktif
+      responses:
+        '200':
+          description: Data akun pengguna
+  /dashboard:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Ringkasan statistik operasional sekolah
+      responses:
+        '200':
+          description: Metrik dan ringkasan harian
+  /students:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Direktori daftar siswa dengan paginasi dan filter
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: class_id
+          in: query
+          schema: { type: string }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+      responses:
+        '200':
+          description: Daftar siswa
+  /students/{student}/cards/issue:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Penerbitan Kartu Pelajar baru (Menghasilkan token QR opaque & simpan hash SHA-256)
+      parameters:
+        - name: student
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '201':
+          description: Kartu Pelajar berhasil diterbitkan
+  /attendance/scans:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Pindai QR Kartu Pelajar untuk absensi harian (Idempotent)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [card_token]
+              properties:
+                card_token: { type: string, example: "KP_20261001_TELADAN" }
+                idempotency_key: { type: string }
+      responses:
+        '201':
+          description: Kehadiran berhasil dicatat
+        '200':
+          description: Kartu sudah dipindai sebelumnya (Idempotent)
+        '404':
+          description: Kartu tidak valid atau tidak aktif
+  /invoices:
+    get:
+      security: [{ bearerAuth: [] }]
+      summary: Daftar tagihan SPP dan status pembayaran
+      responses:
+        '200':
+          description: Daftar invoice
+  /invoices/{invoice}/payments:
+    post:
+      security: [{ bearerAuth: [] }]
+      summary: Pencatatan pembayaran SPP (Tunai / Manual teraudit)
+      parameters:
+        - name: invoice
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount, method]
+              properties:
+                amount: { type: integer, example: 350000 }
+                method: { type: string, enum: [cash, transfer, manual] }
+                reference: { type: string }
+      responses:
+        '201':
+          description: Pembayaran berhasil dicatat
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum Token
