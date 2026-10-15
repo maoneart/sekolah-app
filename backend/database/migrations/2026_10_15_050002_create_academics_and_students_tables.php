@@ -39,6 +39,9 @@ return new class extends Migration
             $table->string('name');
             $table->date('birth_date')->nullable();
             $table->enum('gender', ['L', 'P']);
+            $table->text('address')->nullable();
+            $table->date('admission_date')->nullable(); // Tanggal Masuk
+            $table->date('graduation_date')->nullable(); // Tanggal Lulus
             $table->string('status', 20)->default('active'); // active, graduated, transferred, dropped
             $table->timestamps();
 

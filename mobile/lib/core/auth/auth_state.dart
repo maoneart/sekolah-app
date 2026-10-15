@@ -8,18 +8,36 @@ class User {
   final String name;
   final String? email;
   final String? phone;
+  final String? gender;
+  final String? birthDate;
+  final int? age;
+  final String? address;
   final List<String> roles;
   final String? activeSchoolId;
   final String? activeSchoolName;
+  final List<String> permissions;
+  final List<Map<String, dynamic>> menus;
+  final Map<String, dynamic>? dashboardConfig;
+  final List<Map<String, dynamic>> children;
+  final Map<String, dynamic>? student;
 
   User({
     required this.id,
     required this.name,
     this.email,
     this.phone,
+    this.gender,
+    this.birthDate,
+    this.age,
+    this.address,
     required this.roles,
     this.activeSchoolId,
     this.activeSchoolName,
+    this.permissions = const [],
+    this.menus = const [],
+    this.dashboardConfig,
+    this.children = const [],
+    this.student,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -28,9 +46,28 @@ class User {
       name: json['name'] ?? '',
       email: json['email'],
       phone: json['phone'],
+      gender: json['gender'],
+      birthDate: json['birth_date'],
+      age: json['age'] is int ? json['age'] : (json['age'] != null ? int.tryParse(json['age'].toString()) : null),
+      address: json['address'],
       roles: (json['roles'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
       activeSchoolId: json['active_school_id'],
-      activeSchoolName: json['active_school_name'],
+      activeSchoolName: json['active_school_name'] ?? 'SD Negeri 1 Teladan',
+      permissions: (json['permissions'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      menus: (json['menus'] as List<dynamic>?)
+              ?.map((e) => Map<String, dynamic>.from(e as Map))
+              .toList() ??
+          [],
+      dashboardConfig: json['dashboard_config'] != null
+          ? Map<String, dynamic>.from(json['dashboard_config'] as Map)
+          : null,
+      children: (json['children'] as List<dynamic>?)
+              ?.map((e) => Map<String, dynamic>.from(e as Map))
+              .toList() ??
+          [],
+      student: json['student'] != null
+          ? Map<String, dynamic>.from(json['student'] as Map)
+          : null,
     );
   }
 }

@@ -4,7 +4,9 @@ import 'package:go_router/go_router.dart';
 import '../core/auth/auth_state.dart';
 import '../features/academic/presentation/academic_screen.dart';
 import '../features/account/presentation/account_screen.dart';
+import '../features/admin/presentation/role_access_screen.dart';
 import '../features/attendance/presentation/qr_scan_screen.dart';
+import '../features/attendance/presentation/student_qr_card_screen.dart';
 import '../features/auth/presentation/login_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/finance/presentation/finance_screen.dart';
@@ -44,6 +46,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/scan-qr',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const QrScanScreen(),
+      ),
+      GoRoute(
+        path: '/my-card',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const StudentQrCardScreen(),
+      ),
+      GoRoute(
+        path: '/admin/roles',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const RoleAccessScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {

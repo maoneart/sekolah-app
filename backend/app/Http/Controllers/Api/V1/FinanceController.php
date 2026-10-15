@@ -13,23 +13,46 @@ class FinanceController extends Controller
     public function invoices(Request $request): JsonResponse
     {
         $schoolId = $this->getSchoolId($request);
+        $user = $request->user();
 
         $query = DB::table('invoices')
             ->join('students', 'invoices.student_id', '=', 'students.id')
+            ->leftJoin('class_enrollments', function ($join) {
+                $join->on('students.id', '=', 'class_enrollments.student_id')
+                    ->where('class_enrollments.status', 'active');
+            })
+            ->leftJoin('classes', 'class_enrollments.class_id', '=', 'classes.id')
             ->where('invoices.school_id', $schoolId)
             ->select(
                 'invoices.id',
+                'invoices.student_id',
                 'invoices.invoice_no',
                 'invoices.period',
                 'invoices.due_on',
                 'invoices.total_amount',
                 'invoices.status',
                 'students.name as student_name',
-                'students.admission_no'
+                'students.admission_no',
+                'classes.name as class_name'
             );
 
-        if ($studentId = $request->query('student_id')) {
-            $query->where('invoices.student_id', $studentId);
+        // Check if logged in user is a guardian (Orang Tua)
+        $guardian = DB::table('guardians')->where('user_id', $user->id)->first();
+        if ($guardian) {
+            $childIds = DB::table('student_guardians')
+                ->where('guardian_id', $guardian->id)
+                ->pluck('student_id')
+                ->toArray();
+
+            if ($studentId = $request->query('student_id')) {
+                $query->where('invoices.student_id', $studentId);
+            } else {
+                $query->whereIn('invoices.student_id', $childIds);
+            }
+        } else {
+            if ($studentId = $request->query('student_id')) {
+                $query->where('invoices.student_id', $studentId);
+            }
         }
 
         if ($status = $request->query('status')) {
