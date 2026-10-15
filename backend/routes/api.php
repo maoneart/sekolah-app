@@ -17,6 +17,16 @@ use Illuminate\Support\Facades\Route;
 | Source of Truth for School Management System
 */
 
+// Service Health / Status
+Route::get('/', function () {
+    return response()->json([
+        'status' => 'online',
+        'service' => 'API Manajemen Sekolah',
+        'version' => '1.0.0',
+        'time' => now()->toIso8601String(),
+    ]);
+});
+
 // Public Authentication
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
