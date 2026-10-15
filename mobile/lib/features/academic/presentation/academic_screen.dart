@@ -54,14 +54,14 @@ class AcademicScreen extends ConsumerWidget {
             // Timetable tab
             ListView(
               padding: const EdgeInsets.all(16),
-              children: [
+              children: const [
                 _ScheduleItem(
                   time: '07:30 - 09:00',
                   subject: 'Pemrograman Web & Perangkat Bergerak',
                   room: 'Lab Komputer 3',
                   teacher: 'Budi Santoso, S.Kom.',
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12),
                 _ScheduleItem(
                   time: '09:15 - 10:45',
                   subject: 'Basis Data',
@@ -90,7 +90,7 @@ class AcademicScreen extends ConsumerWidget {
                           style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
                         ),
                         const SizedBox(height: 16),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             _AttendanceBadge(label: 'Hadir', count: '34', color: AppColors.statusPresent),

@@ -13,9 +13,9 @@ on:
   workflow_dispatch:
     inputs:
       api_base_url:
-        description: 'Base URL for API (e.g. https://api.staging.sekolah.sch.id/api/v1)'
+        description: 'Base URL for API'
         required: false
-        default: 'https://api.example.sch.id/api/v1'
+        default: 'https://api.maoneart.my.id/api/v1'
 
 jobs:
   build:
@@ -57,7 +57,7 @@ jobs:
 
       - name: Build APK (Release)
         run: |
-          API_URL="${{ github.event.inputs.api_base_url || 'https://api.example.sch.id/api/v1' }}"
+          API_URL="${{ github.event.inputs.api_base_url || 'https://api.maoneart.my.id/api/v1' }}"
           flutter build apk --release --dart-define=API_BASE_URL="$API_URL"
 
       - name: Upload APK Artifact

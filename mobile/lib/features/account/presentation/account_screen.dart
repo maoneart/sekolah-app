@@ -111,10 +111,10 @@ class AccountScreen extends ConsumerWidget {
                   onTap: () {},
                 ),
                 const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.info_outline),
-                  title: const Text('Tentang Aplikasi'),
-                  subtitle: const Text('Versi 1.0.0 (MVP)'),
+                const ListTile(
+                  leading: Icon(Icons.info_outline),
+                  title: Text('Tentang Aplikasi'),
+                  subtitle: Text('Versi 1.0.0 (MVP)'),
                 ),
               ],
             ),

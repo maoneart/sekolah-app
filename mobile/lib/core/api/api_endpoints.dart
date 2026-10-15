@@ -2,7 +2,7 @@ class ApiEndpoints {
   // Configured via compile-time dart-define
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8000/api/v1', // Android emulator default
+    defaultValue: 'https://api.maoneart.my.id/api/v1',
   );
 
   // Auth

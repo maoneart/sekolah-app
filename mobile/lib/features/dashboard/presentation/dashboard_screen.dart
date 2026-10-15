@@ -14,7 +14,7 @@ class DashboardScreen extends ConsumerWidget {
 
     final userName = user?.name ?? 'Pengguna';
     final schoolName = user?.activeSchoolName ?? 'SMK Negeri 1 Teladan';
-    final academicPeriod = '2026/2027 · Semester Ganjil';
+    const academicPeriod = '2026/2027 · Semester Ganjil';
 
     return Scaffold(
       appBar: AppBar(
